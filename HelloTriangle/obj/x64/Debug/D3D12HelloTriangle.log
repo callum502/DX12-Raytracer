@@ -1,0 +1,22 @@
+﻿  Win32Application.cpp
+  D3D12HelloTriangle.vcxproj -> X:\HelloTriangle\HelloTriangle\bin\x64\Debug\D3D12HelloTriangle.exe
+  Copy dxcompiler.dll and dxil.dll to target folder
+  
+  -------------------------------------------------------------------------------
+     ROBOCOPY     ::     Robust File Copy for Windows                              
+  -------------------------------------------------------------------------------
+  
+    Started : 22 September 2024 00:54:00
+     Source : X:\x64\
+       Dest : X:\HelloTriangle\HelloTriangle\bin\x64\Debug\
+  
+      Files : dxcompiler.dll
+  	    dxil.dll
+  	    
+    Options : /DCOPY:DA /COPY:DAT /R:1000000 /W:30 
+  
+  ------------------------------------------------------------------------------
+  
+  2024/09/22 00:54:00 ERROR 2 (0x00000002) Accessing Source Directory X:\x64\
+  The system cannot find the file specified.
+  

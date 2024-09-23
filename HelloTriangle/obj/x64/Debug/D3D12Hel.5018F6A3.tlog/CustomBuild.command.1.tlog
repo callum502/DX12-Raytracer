@@ -1,0 +1,2 @@
+^X:\HELLOTRIANGLE\HELLOTRIANGLE\SHADERS.HLSL
+copy shaders.hlsl "bin\x64\Debug\" > NUL
