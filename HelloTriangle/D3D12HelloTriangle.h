@@ -13,6 +13,11 @@
 
 #include "DXSample.h"
 
+#include <dxcapi.h>
+#include <vector>
+#include "TopLevelASGenerator.h"
+#include "BottomLevelASGenerator.h"
+
 using namespace DirectX;
 
 // Note that while ComPtr is used to manage the lifetime of resources on the CPU,
@@ -42,6 +47,13 @@ private:
 		XMFLOAT4 color;
 	};
 
+	struct AccelerationStructureBuffers
+	{
+		ComPtr<ID3D12Resource> pScratch;      // Scratch memory for AS builder
+		ComPtr<ID3D12Resource> pResult;       // Where the AS is
+		ComPtr<ID3D12Resource> pInstanceDesc; // Hold the matrices of the instances
+	};
+
 	// Pipeline objects.
 	CD3DX12_VIEWPORT m_viewport;
 	CD3DX12_RECT m_scissorRect;
@@ -66,10 +78,28 @@ private:
 	ComPtr<ID3D12Fence> m_fence;
 	UINT64 m_fenceValue;
 
+	ComPtr<ID3D12Resource> m_bottomLevelAS; // Storage for the bottom Level AS
+
+	nv_helpers_dx12::TopLevelASGenerator m_topLevelASGenerator;
+	AccelerationStructureBuffers m_topLevelASBuffers;
+	std::vector<std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> m_instances;
+
 	virtual void OnKeyUp(UINT8 key);
 	void CheckRaytracingSupport();
 	void LoadPipeline();
 	void LoadAssets();
 	void PopulateCommandList();
 	void WaitForPreviousFrame();
+
+	/// Create the acceleration structure of an instance (or multiple), takes in vertex buffers and counts, output the AS buffers for TLAS
+	AccelerationStructureBuffers CreateBottomLevelAS(
+		std::vector<std::pair<ComPtr<ID3D12Resource>, uint32_t>> vVertexBuffers);
+
+	/// Create TLAS, takes in vector of BLAS buffers and their transforms
+	void CreateTopLevelAS(
+		const std::vector<std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>
+		& instances);
+
+	/// Create 2 level AS from BLAS and TLAS
+	void CreateAccelerationStructures();
 };
